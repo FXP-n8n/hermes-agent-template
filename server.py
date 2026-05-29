@@ -1208,6 +1208,10 @@ async def route_setup_404(request: Request) -> Response:
 
 # ── App lifecycle ─────────────────────────────────────────────────────────────
 async def auto_start():
+    if not is_config_complete() and not ENV_FILE.exists():
+        # Volume may not be mounted yet on a fast redeploy — wait and retry once.
+        print("[server] ENV_FILE not found at startup; retrying in 5s (volume mount race guard).", flush=True)
+        await asyncio.sleep(5)
     if is_config_complete():
         asyncio.create_task(gw.start())
     else:
