@@ -66,6 +66,9 @@ RUN git clone --depth 1 --branch ${HERMES_REF} https://github.com/NousResearch/h
 COPY requirements.txt /app/requirements.txt
 RUN uv pip install --system --no-cache -r /app/requirements.txt
 
+# Cache-bust: increment to force rebuild of layers below
+ARG BUILDTIME=20260530
+
 # ChromaDB + sentence-transformers for knowledge extraction and briefings (added 2026-05-30)
 RUN uv pip install --system --no-cache 'chromadb>=0.5.0' 'sentence-transformers>=3.0.0'
 
