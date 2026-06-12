@@ -173,6 +173,8 @@ def read_env(path: Path) -> dict[str, str]:
     out = {}
     for line in path.read_text().splitlines():
         line = line.strip()
+        if line.startswith("export "):
+            line = line[len("export "):]
         if not line or line.startswith("#") or "=" not in line:
             continue
         k, _, v = line.partition("=")
